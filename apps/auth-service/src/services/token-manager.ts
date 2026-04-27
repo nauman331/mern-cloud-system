@@ -1,6 +1,14 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { Session } from '../models/session';
+import { createClient } from 'redis';
+
+const redisClient = createClient({
+    url: `redis://${String(process.env.REDIS_HOST)}:${Number(process.env.REDIS_PORT)}`,
+});
+
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
+redisClient.connect();
 
 export class TokenManager {
     static generateAccessToken(userId: string, email: string) {
@@ -11,6 +19,15 @@ export class TokenManager {
 
     static generateRefreshToken() {
         return crypto.randomBytes(40).toString('hex');
+    }
+
+    static async blacklistToken(token: string, expiryInSeconds: number) {
+        await redisClient.setEx(`blacklist:${token}`, expiryInSeconds, 'true');
+    }
+
+    static async isBlacklisted(token: string) {
+        const result = await redisClient.get(`blacklist:${token}`);
+        return result === 'true';
     }
 
     static async rotateToken(oldRefreshToken: string, ip: string, agent: string) {
