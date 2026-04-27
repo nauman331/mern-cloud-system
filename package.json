@@ -1,0 +1,31 @@
+{
+  "name": "mern-cloud-system",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "prettier": "^3.7.4",
+    "turbo": "^2.9.6",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@11.12.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@types/mongoose": "^5.11.96",
+    "cookie-parser": "^1.4.7",
+    "express-async-errors": "^3.1.1",
+    "mongoose": "^9.5.0"
+  }
+}
