@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  auth-service:
+    build:
+      context: .
+      dockerfile: apps/auth-service/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/auth
+      - REDIS_HOST=redis
+      - JWT_KEY=asdfghjkl
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - SNS_AUTH_TOPIC_ARN=arn:aws:sns:us-east-1:000000000000:auth-topic
+    depends_on:
+      - mongodb
+      - redis
+      - localstack
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sns,sqs,s3
+      - DEBUG=1

@@ -1,6 +1,7 @@
 import { NotAuthorizedError } from '@cloud-system/common'
 import { Request, Response } from 'express';
 import { TokenManager } from '../services/token-manager';
+import { NotificationService } from '../services/notification-service';
 import { User } from '../models/user';
 import { Session } from '../models/session';
 import { OAuth2Client } from 'google-auth-library';
@@ -27,6 +28,10 @@ export const googleLogin = async (req: Request, res: Response) => {
             googleId: payload.sub,
         });
         await user.save();
+        await NotificationService.sendNotification(
+            String(process.env.SNS_AUTH_TOPIC_ARN),
+            `New user registered: ${user.email}`
+        );
     }
     const accessToken = TokenManager.generateAccessToken(user.id, user.email);
     const refreshToken = TokenManager.generateRefreshToken();

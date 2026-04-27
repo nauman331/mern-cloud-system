@@ -9,6 +9,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@aws-sdk/client-sns": "^3.1037.0",
     "@cloud-system/common": "*",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
