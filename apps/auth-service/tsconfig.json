@@ -5,23 +5,21 @@
     "moduleResolution": "NodeNext",
     "rootDir": "./src",
     "outDir": "./dist",
-    "paths": {
-      "@cloud-system/common": [
-        "../../packages/common/src/index.ts"
-      ]
-    },
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "inlineSourceMap": true,
-    "declaration": true
+    "paths": {
+      "@cloud-system/common": [
+        "../../packages/common/src/index"
+      ]
+    }
   },
   "include": [
     "src/**/*"
   ],
-  "exclude": [
-    "node_modules",
-    "dist"
+  "references": [
+    {
+      "path": "../../packages/common"
+    }
   ]
 }
