@@ -9,8 +9,10 @@ services:
     environment:
       - MONGO_URI=mongodb://mongodb:27017/auth
       - REDIS_HOST=redis
+      - REDIS_PORT=6379
       - JWT_KEY=asdfghjkl
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - SNS_AUTH_TOPIC_ARN=arn:aws:sns:us-east-1:000000000000:auth-topic
     depends_on:
       - mongodb
