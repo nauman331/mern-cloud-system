@@ -10,7 +10,7 @@ services:
       - MONGO_URI=mongodb://mongodb:27017/auth
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - JWT_KEY=asdfghjkl
+      - JWT_KEY=${JWT_KEY}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - SNS_AUTH_TOPIC_ARN=arn:aws:sns:us-east-1:000000000000:auth-topic
@@ -18,7 +18,19 @@ services:
       - mongodb
       - redis
       - localstack
-      
+
+  payment-service: # Fixed Indentation
+    build:
+      context: .
+      dockerfile: apps/payment-service/Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/payments 
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+    depends_on: # Added dependency
+      - mongodb
 
   mongodb:
     image: mongo:6.0
