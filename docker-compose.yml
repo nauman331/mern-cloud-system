@@ -18,6 +18,7 @@ services:
       - mongodb
       - redis
       - localstack
+      
 
   mongodb:
     image: mongo:6.0

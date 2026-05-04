@@ -1,4 +1,4 @@
-import { NotAuthorizedError, RequestValidationError } from '@cloud-system/common';
+import { NotAuthorizedError, BadRequestError } from '@cloud-system/common';
 import { Request, Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
 import { User } from '../models/user';
@@ -66,7 +66,7 @@ export const signup = async (req: Request, res: Response) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-        throw new RequestValidationError([{ message: 'Email already in use' } as any]);
+        throw new BadRequestError('Email is already in use');
     }
 
     const hashedPassword = await PasswordManager.hashPassword(password);
