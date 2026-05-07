@@ -57,3 +57,5 @@ services:
     environment:
       - SERVICES=sns,sqs,s3
       - DEBUG=1
+    volumes:
+      - ./aws-init/setup.sh:/etc/localstack/init/ready.d/setup.sh
