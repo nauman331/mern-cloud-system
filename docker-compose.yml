@@ -1,5 +1,17 @@
 version: '3.8'
+
 services:
+  api-gateway:
+    image: nginx:latest
+    ports:
+      - "80:80" 
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - auth-service
+      - payment-service
+      # - order-service
+
   auth-service:
     build:
       context: .
@@ -21,7 +33,7 @@ services:
       - redis
       - localstack
 
-  payment-service: # Fixed Indentation
+  payment-service:
     build:
       context: .
       dockerfile: apps/payment-service/Dockerfile
@@ -29,13 +41,33 @@ services:
       - "3002:3002"
     environment:
       - MONGO_URI=mongodb://mongodb:27017/payments 
+      - JWT_KEY=${JWT_KEY}
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - AWS_REGION=${AWS_REGION}
       - SNS_ENDPOINT=${SNS_ENDPOINT}
       - SNS_ORDER_TOPIC_ARN=${SNS_ORDER_TOPIC_ARN}
-    depends_on: # Added dependency
+      - SQS_QUEUE_URL=${SQS_QUEUE_URL}
+    depends_on: 
       - mongodb
+      - localstack
+
+  # order-service:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/order-service/Dockerfile
+  #   ports:
+  #     - "3003:3003"
+  #   environment:
+  #     - MONGO_URI=mongodb://mongodb:27017/orders
+  #     - JWT_KEY=${JWT_KEY}
+  #     - AWS_REGION=${AWS_REGION}
+  #     - SNS_ENDPOINT=${SNS_ENDPOINT}
+  #     - SNS_ORDER_TOPIC_ARN=${SNS_ORDER_TOPIC_ARN}
+  #     - SQS_QUEUE_URL=${SQS_QUEUE_URL}
+  #   depends_on:
+  #     - mongodb
+  #     - localstack
 
   mongodb:
     image: mongo:6.0

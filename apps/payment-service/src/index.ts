@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { app } from './app';
+import { startOrderCreatedListener } from './listeners/order-created-listener';
 
 const start = async () => {
     if (!process.env.MONGO_URI) throw new Error('MONGO_URI must be defined');
@@ -10,6 +11,7 @@ const start = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to MongoDB (Payments)');
+        startOrderCreatedListener();
     } catch (err) {
         console.error('Database connection failed', err);
     }

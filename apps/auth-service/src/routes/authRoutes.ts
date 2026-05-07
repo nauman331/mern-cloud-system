@@ -51,5 +51,8 @@ router.post('/login',
     validateRequest,
     login
 );
+router.get('/currentuser', (req, res) => {
+    res.send({ currentUser: req.currentUser || null });
+});
 
 export { router as authRouter };

@@ -6,7 +6,7 @@ import { createOrder } from '../controllers/order-controller';
 const router = express.Router();
 
 router.post(
-    '/api/orders',
+    '/orders',
     requireAuth,
     [
         body('price').isFloat({ gt: 0 }).withMessage('Price must be greater than 0'),

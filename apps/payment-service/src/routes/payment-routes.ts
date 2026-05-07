@@ -7,7 +7,7 @@ import { stripeWebhook } from '../controllers/webhook-controller';
 const router = express.Router();
 
 router.post(
-    '/api/payments/create-intent',
+    '/create-intent',
     requireAuth,
     [
         body('orderId')
@@ -20,7 +20,7 @@ router.post(
 );
 
 router.post(
-    '/api/payments/webhook',
+    '/webhook',
     express.raw({ type: 'application/json' }),
     stripeWebhook
 );
