@@ -13,7 +13,7 @@ export const startOrderCreatedListener = () => {
         queueUrl: `http://localstack:4566/000000000000/payment-order-queue`,
         sqs: sqsClient,
         handleMessage: async (message) => {
-            if (!message.Body) return;
+            if (!message.Body) return undefined;
 
             try {
                 const snsEnvelope = JSON.parse(message.Body);
