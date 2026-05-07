@@ -8,10 +8,11 @@ export enum OrderStatus {
 }
 
 interface OrderAttrs {
-    id: string;
+    id?: string;
     status: OrderStatus;
     userId: string;
     price: number;
+    description?: string;
 }
 
 interface OrderDoc extends mongoose.Document {
@@ -50,12 +51,15 @@ const orderSchema = new mongoose.Schema(
 orderSchema.set('versionKey', 'version');
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
-    return new Order({
-        _id: attrs.id,
+    const doc: any = {
         userId: attrs.userId,
         price: attrs.price,
         status: attrs.status,
-    });
+    };
+    if (attrs.id) {
+        doc._id = attrs.id;
+    }
+    return new Order(doc);
 };
 
 const Order = mongoose.model<OrderDoc, OrderModel>('Order', orderSchema);

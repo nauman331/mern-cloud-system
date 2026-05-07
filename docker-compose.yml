@@ -13,7 +13,9 @@ services:
       - JWT_KEY=${JWT_KEY}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - SNS_AUTH_TOPIC_ARN=arn:aws:sns:us-east-1:000000000000:auth-topic
+      - AWS_REGION=${AWS_REGION}
+      - SNS_ENDPOINT=${SNS_ENDPOINT}
+      - SNS_AUTH_TOPIC_ARN=${SNS_AUTH_TOPIC_ARN}
     depends_on:
       - mongodb
       - redis
@@ -29,6 +31,9 @@ services:
       - MONGO_URI=mongodb://mongodb:27017/payments 
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - AWS_REGION=${AWS_REGION}
+      - SNS_ENDPOINT=${SNS_ENDPOINT}
+      - SNS_ORDER_TOPIC_ARN=${SNS_ORDER_TOPIC_ARN}
     depends_on: # Added dependency
       - mongodb
 

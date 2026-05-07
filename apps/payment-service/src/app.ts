@@ -1,22 +1,21 @@
-import express, { Request, Response, NextFunction, Application } from 'express';
-import "express-async-errors";
+import express from 'express';
+import 'express-async-errors';
 import { json } from 'body-parser';
-import { errorHandler, currentUser } from '@cloud-system/common';
+import cookieParser from 'cookie-parser';
+import { errorHandler, currentUser, NotFoundError } from '@cloud-system/common';
+import { orderRouter } from './routes/order-routes';
 
-const app: Application = express();
+const app = express();
+app.set('trust proxy', true);
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-    if (req.originalUrl === '/api/payments/webhook') {
-        next();
-    } else {
-        json()(req, res, next);
-    }
-});
-
+app.use(json());
+app.use(cookieParser());
 app.use(currentUser);
 
+app.use(orderRouter);
+
 app.all('*', async () => {
-    throw new Error('Route not found');
+    throw new NotFoundError();
 });
 
 app.use(errorHandler);
